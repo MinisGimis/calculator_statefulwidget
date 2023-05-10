@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 const RESULT_COLOUR = Color(0xFFF8F8F8);
 const BACKGROUND_COLOUR = Color(0xFFFFFFFF);
-
-//
 
 double addDigit(double number, int newDigit) => (number * 10) + newDigit;
 void main() {
@@ -20,7 +16,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       home: Scaffold(
         body: MyHomePage(),
-      ),
+      )
     );
   }
 }
@@ -40,19 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
   
   List buttonText = [1, 2, 3, "x", 4, 5, 6, "÷", 7, 8, 9, "-", "", 0, "=", "+"];
 
-
-  //CALCULATOR LOGIC
-  //clicking on numbers adds the digit to the end of the number
-  //immediately after an operation (x / + - =), clicking on a number starts with a new number
-  //pressing on = performs the last operation again
-  //pressing on x / + - multiple times in a row doesn't do anything
-  //x / + - also performs the last operation
-
   void equals() {
 
     double first = clearAnswer ? displayNum : n1;
     double second = clearAnswer ? n1 : displayNum;
-    print("$operation, $first, $second, $clearAnswer, display: $displayNum, n1: $n1");
 
     switch(operation) {
 
@@ -84,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
     switch(buttonText[buttonIndex]) {
 
       case "":
-        print("clear");
         displayNum = 0.0;
         n1 = 0.0;
         operation = "";
@@ -118,66 +104,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 168,
-          color: RESULT_COLOUR,
-          width: double.infinity,
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20, right: 42),
-              child: Text(displayNum.toInt().toString(),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 50,
-                  fontWeight: FontWeight.w700,
-                )
+
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double ratio = width/height;
+    print(ratio);
+
+
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          Container(
+            height: 168,
+            color: RESULT_COLOUR,
+            width: double.infinity,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20, right: 42),
+                child: Text(displayNum.toInt().toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 50,
+                    fontWeight: FontWeight.w700,
+                  )
+                ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            color: BACKGROUND_COLOUR,
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 16,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return TextButton(
-                  onPressed: () {
-                    setState(() {
-                      print(buttonText[index]);
-                      if (buttonText[index] is int) {
-                        digitPressed(index);
-                      }
-                      else {
-                        operationPressed(index);
-                      }
-                    });
-                  },
-                  child: Center(
-                    child: Text(
-                      buttonText[index].toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 37,
-                        fontWeight: FontWeight.w500,
-                      ),
+          Expanded(
+            child: Container(
+              color: BACKGROUND_COLOUR,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  double width = constraints.maxWidth;
+                  double height = constraints.maxHeight;
+                  double ratio = width / height;
+
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 16,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: ratio,
                     ),
-                  ),
-                );
-              },
+                    itemBuilder: (BuildContext context, int index) {
+                      return TextButton(
+                        onPressed: () {
+                          setState(() {
+                            if (buttonText[index] is int) {
+                              digitPressed(index);
+                            } else {
+                              operationPressed(index);
+                            }
+                          });
+                        },
+                        child: Center(
+                          child: Text(
+                            buttonText[index].toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 37,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      )
     );
   }
 }
