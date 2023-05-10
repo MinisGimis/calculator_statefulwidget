@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 const RESULT_COLOUR = Color(0xFFF8F8F8);
 const BACKGROUND_COLOUR = Color(0xFFFFFFFF);
 
+//
+
 double addDigit(double number, int newDigit) => (number * 10) + newDigit;
 void main() {
   runApp(const MyApp());
