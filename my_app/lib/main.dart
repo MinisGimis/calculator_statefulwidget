@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-const RESULT_COLOUR = Color(0xFFF8F8F8);
-const BACKGROUND_COLOUR = Color(0xFFFFFFFF);
-
-double addDigit(double number, int newDigit) => (number * 10) + newDigit;
 void main() {
   runApp(const MyApp());
 }
@@ -13,8 +9,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      color: const Color(0xFFF8F8F8),
+      theme: ThemeData(
+        primaryColor: const Color(0xFFF8F8F8),
+        scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontFamily: 'SF Mono',
+            color: Colors.black,
+            fontSize: 50,
+            fontWeight: FontWeight.w700,
+          ),
+          bodyMedium: TextStyle(
+            fontFamily: 'SF Mono',
+            color: Colors.black,
+            fontSize: 37,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      home: const Scaffold(
         body: MyHomePage(),
       )
     );
@@ -33,8 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
   double n1 = 0.0;
   bool clearAnswer = false;
   String operation = "";
-  
+
   List buttonText = [1, 2, 3, "x", 4, 5, 6, "÷", 7, 8, 9, "-", "", 0, "=", "+"];
+
+  double addDigit(double number, int newDigit) => (number * 10) + newDigit;
 
   void equals() {
 
@@ -105,37 +122,28 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    double ratio = width/height;
-    print(ratio);
-
-
     return SafeArea(
+      //top: false, //some reason removing top app bar breaks the layout for the buttons
       bottom: false,
       child: Column(
         children: [
           Container(
             height: 168,
-            color: RESULT_COLOUR,
+            color: Theme.of(context).primaryColor,
             width: double.infinity,
             child: Align(
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20, right: 42),
                 child: Text(displayNum.toInt().toString(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 50,
-                    fontWeight: FontWeight.w700,
-                  )
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
             ),
           ),
           Expanded(
             child: Container(
-              color: BACKGROUND_COLOUR,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   double width = constraints.maxWidth;
@@ -163,11 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Center(
                           child: Text(
                             buttonText[index].toString(),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 37,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ),
                       );
