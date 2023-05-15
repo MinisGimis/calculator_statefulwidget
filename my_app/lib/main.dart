@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.only(bottom: 20, right: 42),
                 child: BlocBuilder<CalculatorCubit, CalculatorState>(
                   builder: (context, state) {
-                    return Text(state.displayNum.toInt().toString(),
+                    return Text(state.showDecimal ? state.displayNum.toString() : state.displayNum.toInt().toString(),
                       style: Theme.of(context).textTheme.bodyLarge,
                     );
                   }
