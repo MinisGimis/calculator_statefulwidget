@@ -8,11 +8,11 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void addDigit(int newDigit) {
     if (state.clearAnswer) {
       double temp = state.displayNum;
-      emit(CalculatorState(displayNum: 0.0, operationSymbol: state.operationSymbol, n1: temp, clearAnswer: false));
+      emit(state.copyWith(displayNum: 0.0, n1: temp, clearAnswer: false));
     }
     if (state.displayNum < 1000000000) {
       double newDisplayNum = (state.displayNum * 10) + newDigit;
-      emit(CalculatorState(displayNum: newDisplayNum, operationSymbol: state.operationSymbol, n1: state.n1, clearAnswer: state.clearAnswer));
+      emit(state.copyWith(displayNum: newDisplayNum));
     }
   }
 
@@ -20,7 +20,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     if (!state.clearAnswer && state.operationSymbol != "") {
       calculateResult();
     }
-    emit(CalculatorState(displayNum: state.displayNum, operationSymbol: newOperation, n1: state.n1, clearAnswer: true));
+    emit(state.copyWith(operationSymbol: newOperation, clearAnswer: true));
   }
 
   void calculateResult() {
@@ -50,7 +50,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         break;
     }
 
-    emit(CalculatorState(displayNum: result, operationSymbol: state.operationSymbol, n1: second, clearAnswer: true));
+    emit(state.copyWith(displayNum: result, n1: second, clearAnswer: true));
   }
 
   void reset() {

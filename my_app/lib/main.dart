@@ -54,89 +54,89 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalculatorCubit, CalculatorState>(
-      builder: (context, state) {
-        return SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              Container(
-                height: 168,
-                color: Theme.of(context).primaryColor,
-                width: double.infinity,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20, right: 42),
-                    child: Text(state.displayNum.toInt().toString(),
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          Container(
+            height: 168,
+            color: Theme.of(context).primaryColor,
+            width: double.infinity,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20, right: 42),
+                child: BlocBuilder<CalculatorCubit, CalculatorState>(
+                  builder: (context, state) {
+                    return Text(state.displayNum.toInt().toString(),
                       style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                ),
+                    );
+                  }
+                )
               ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: LayoutBuilder(
-                    builder: (BuildContext context, BoxConstraints constraints) {
-                      double width = constraints.maxWidth;
-                      double height = constraints.maxHeight;
-                      double ratio = width / height;
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  double width = constraints.maxWidth;
+                  double height = constraints.maxHeight;
+                  double ratio = width / height;
 
-                      return GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 16,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          childAspectRatio: ratio,
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return TextButton(
-                            onPressed: () {
-                              if (buttonText[index] is int) {
-                                context.read<CalculatorCubit>().addDigit(buttonText[index]);
-                              } else {
-                                switch(buttonText[index]) {
-                                  case "":
-                                    context.read<CalculatorCubit>().reset();
-                                    break;
-                                  case "=":
-                                    context.read<CalculatorCubit>().calculateResult();
-                                    break;
-                                  case "+":
-                                    context.read<CalculatorCubit>().setOperation("+");
-                                    break;
-                                  case "-":
-                                    context.read<CalculatorCubit>().setOperation("-");
-                                    break;
-                                  case "x":
-                                    context.read<CalculatorCubit>().setOperation("x");
-                                    break;
-                                  case "÷":
-                                    context.read<CalculatorCubit>().setOperation("÷");
-                                    break;
-                                  default:
-                                    break;
-                                }
-                              }
-                            },
-                            child: Center(
-                              child: Text(
-                                buttonText[index].toString(),
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-                          );
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 16,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: ratio,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return TextButton(
+                        onPressed: () {
+                          if (buttonText[index] is int) {
+                            context.read<CalculatorCubit>().addDigit(buttonText[index]);
+                          } else {
+                            switch(buttonText[index]) {
+                              case "":
+                                context.read<CalculatorCubit>().reset();
+                                break;
+                              case "=":
+                                context.read<CalculatorCubit>().calculateResult();
+                                break;
+                              case "+":
+                                context.read<CalculatorCubit>().setOperation("+");
+                                break;
+                              case "-":
+                                context.read<CalculatorCubit>().setOperation("-");
+                                break;
+                              case "x":
+                                context.read<CalculatorCubit>().setOperation("x");
+                                break;
+                              case "÷":
+                                context.read<CalculatorCubit>().setOperation("÷");
+                                break;
+                              default:
+                                break;
+                            }
+                          }
                         },
+                        child: Center(
+                          child: Text(
+                            buttonText[index].toString(),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
                       );
                     },
-                  ),
-                ),
+                  );
+                },
               ),
-            ],
+            ),
           ),
-        );
-      }
+        ],
+      ),
     );
   }
 }
