@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'calculator_state.dart';
 
 class CalculatorCubit extends Cubit<CalculatorState> {
-  CalculatorCubit() : super(CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
+  CalculatorCubit() : super(const CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
 
   void addDigit(int newDigit) {
     if (state.clearAnswer) {
@@ -59,6 +59,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   }
 
   void reset() {
-    emit(CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
+    emit(const CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
   }
 }
