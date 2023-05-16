@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+CalculatorState _$CalculatorStateFromJson(Map<String, dynamic> json) {
+  return _CalculatorState.fromJson(json);
+}
+
 /// @nodoc
 mixin _$CalculatorState {
   double get displayNum => throw _privateConstructorUsedError;
@@ -22,6 +26,7 @@ mixin _$CalculatorState {
   bool get clearAnswer => throw _privateConstructorUsedError;
   bool get showDecimal => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $CalculatorStateCopyWith<CalculatorState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -144,7 +149,7 @@ class __$$_CalculatorStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_CalculatorState implements _CalculatorState {
   const _$_CalculatorState(
       {required this.displayNum,
@@ -152,6 +157,9 @@ class _$_CalculatorState implements _CalculatorState {
       required this.n1,
       required this.clearAnswer,
       required this.showDecimal});
+
+  factory _$_CalculatorState.fromJson(Map<String, dynamic> json) =>
+      _$$_CalculatorStateFromJson(json);
 
   @override
   final double displayNum;
@@ -185,6 +193,7 @@ class _$_CalculatorState implements _CalculatorState {
                 other.showDecimal == showDecimal));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, displayNum, operationSymbol, n1, clearAnswer, showDecimal);
@@ -194,6 +203,13 @@ class _$_CalculatorState implements _CalculatorState {
   @pragma('vm:prefer-inline')
   _$$_CalculatorStateCopyWith<_$_CalculatorState> get copyWith =>
       __$$_CalculatorStateCopyWithImpl<_$_CalculatorState>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_CalculatorStateToJson(
+      this,
+    );
+  }
 }
 
 abstract class _CalculatorState implements CalculatorState {
@@ -203,6 +219,9 @@ abstract class _CalculatorState implements CalculatorState {
       required final double n1,
       required final bool clearAnswer,
       required final bool showDecimal}) = _$_CalculatorState;
+
+  factory _CalculatorState.fromJson(Map<String, dynamic> json) =
+      _$_CalculatorState.fromJson;
 
   @override
   double get displayNum;

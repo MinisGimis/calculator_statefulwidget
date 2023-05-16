@@ -1,9 +1,26 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'calculator_state.dart';
 
 class CalculatorCubit extends Cubit<CalculatorState> {
-  CalculatorCubit() : super(const CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
+  CalculatorCubit([String? initialStateJson])
+      : super(initialStateJson != null
+          ? CalculatorState.fromJson(jsonDecode(initialStateJson))
+          : const CalculatorState(
+              displayNum: 0.0,
+              operationSymbol: "",
+              n1: 0.0,
+              clearAnswer: false,
+              showDecimal: false));
+
+  void saveState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String stateString = jsonEncode(state.toJson());
+    prefs.setString('calculatorState', stateString);
+  }
 
   void addDigit(int newDigit) {
     if (state.clearAnswer) {
@@ -56,6 +73,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     }
 
     emit(state.copyWith(displayNum: result, n1: second, clearAnswer: true, showDecimal: displayDecimal));
+    saveState();
   }
 
   void reset() {
