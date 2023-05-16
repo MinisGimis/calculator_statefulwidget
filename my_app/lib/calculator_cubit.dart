@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'calculator_pref.dart';
+
 import 'calculator_state.dart';
 
 class CalculatorCubit extends Cubit<CalculatorState> {
-  CalculatorCubit() : super(loadState() as CalculatorState);
+  CalculatorCubit() : super(CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
 
   void addDigit(int newDigit) {
     if (state.clearAnswer) {
@@ -14,7 +14,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       double newDisplayNum = (state.displayNum * 10) + newDigit;
       emit(state.copyWith(displayNum: newDisplayNum));
     }
-    saveState(state);
   }
 
   void setOperation(String newOperation) {
@@ -55,12 +54,11 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     if (!(result - result.toInt() == 0.0)) {
       displayDecimal = true;
     }
-    saveState(state);
+
     emit(state.copyWith(displayNum: result, n1: second, clearAnswer: true, showDecimal: displayDecimal));
   }
 
   void reset() {
-    saveState(state);
-    emit(const CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
+    emit(CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
   }
 }

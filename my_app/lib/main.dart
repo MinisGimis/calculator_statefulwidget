@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/calculator_bloc/calculator_cubit.dart';
+import 'package:my_app/calculator_cubit.dart';
 
-import './calculator_bloc/calculator_state.dart';
+import 'calculator_state.dart';
 
 void main() {
   runApp(const MyApp());
