@@ -8,7 +8,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void addDigit(int newDigit) {
     if (state.clearAnswer) {
       double temp = state.displayNum;
-      emit(state.copyWith(displayNum: 0.0, n1: temp, clearAnswer: false));
+      emit(state.copyWith(displayNum: 0.0, n1: temp, clearAnswer: false, showDecimal: false));
     }
     if (state.displayNum < 1000000000) {
       double newDisplayNum = (state.displayNum * 10) + newDigit;
