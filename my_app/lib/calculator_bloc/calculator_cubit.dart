@@ -78,5 +78,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   void reset() {
     emit(const CalculatorState(displayNum: 0.0, operationSymbol: "", n1: 0.0, clearAnswer: false, showDecimal: false));
+    saveState();
   }
 }
