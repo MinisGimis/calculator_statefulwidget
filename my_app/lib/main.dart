@@ -1,16 +1,23 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/calculator_bloc/calculator_cubit.dart';
+import 'package:my_app/calculator_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import './calculator_bloc/calculator_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? savedState = prefs.getString('calculatorState');
+  CalculatorModel calculatorModel = CalculatorModel(
+    json: savedState != null ? jsonDecode(savedState) : null,
+  );
 
-  runApp(MyApp(savedState: savedState));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => calculatorModel,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,35 +26,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => CalculatorCubit(savedState),
-      child: MaterialApp(
-        color: const Color(0xFFF8F8F8),
-        theme: ThemeData(
-          primaryColor: const Color(0xFFF8F8F8),
-          scaffoldBackgroundColor: const Color(0xFFFFFFFF),
-          textTheme: const TextTheme(
-            bodyLarge: TextStyle(
-              fontFamily: 'SF Mono',
-              color: Colors.black,
-              fontSize: 50,
-              fontWeight: FontWeight.w700,
-            ),
-            bodyMedium: TextStyle(
-              fontFamily: 'SF Mono',
-              color: Colors.black,
-              fontSize: 37,
-              fontWeight: FontWeight.w500,
-            ),
+    return MaterialApp(
+      color: const Color(0xFFF8F8F8),
+      theme: ThemeData(
+        primaryColor: const Color(0xFFF8F8F8),
+        scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontFamily: 'SF Mono',
+            color: Colors.black,
+            fontSize: 50,
+            fontWeight: FontWeight.w700,
+          ),
+          bodyMedium: TextStyle(
+            fontFamily: 'SF Mono',
+            color: Colors.black,
+            fontSize: 37,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        home: const SafeArea(
-          top: false,
-          bottom: false,
-          child: Scaffold(
-            body: MyHomePage(),
-          ),
-        )
-      )
+      ),
+      home: const SafeArea(
+        top: false,
+        bottom: false,
+        child: Scaffold(
+          body: MyHomePage(),
+        ),
+      ),
     );
   }
 }
@@ -64,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Container(
@@ -74,13 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 20, right: 42),
-              child: BlocBuilder<CalculatorCubit, CalculatorState>(
-                builder: (context, state) {
-                  return Text(state.showDecimal ? state.displayNum.toString() : state.displayNum.toInt().toString(),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  );
-                }
-              )
+              child: Text(
+                context.select((CalculatorModel state) => state.showDecimal)
+                    ? context.select((CalculatorModel state) => state.displayNum.toString())
+                    : context.select((CalculatorModel state) => state.displayNum.toInt().toString()),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
             ),
           ),
         ),
@@ -98,18 +103,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: TextButton(
                             onPressed: () {
                               if (item is int) {
-                                context.read<CalculatorCubit>().addDigit(item);
+                                context.read<CalculatorModel>().addDigit(item);
                               } 
                               else {
                                 switch (item) {
                                   case "":
-                                    context.read<CalculatorCubit>().reset();
+                                    context.read<CalculatorModel>().reset();
                                     break;
                                   case "=":
-                                    context.read<CalculatorCubit>().calculateResult();
+                                    context.read<CalculatorModel>().calculateResult();
                                     break;
                                   default:
-                                    context.read<CalculatorCubit>().setOperation(item);
+                                    context.read<CalculatorModel>().setOperation(item);
                                     break;
                                 }
                               }
